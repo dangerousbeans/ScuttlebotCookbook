@@ -1,24 +1,36 @@
-var ssbClient = require('ssb-client')
-var ssb_backlinks = require('ssb-backlinks')
-
 var pull = require('pull-stream')
-
+var repl = require('repl')
+var ssbClient = require('ssb-client')
 ssbClient(function (err, sbot) {
+  // open the repl session
+  var replServer = repl.start({})
+  replServer.context.sbot = sbot
 
-  sbot.use(ssb_backlinks)
-
-  // Get all channels
+  // stream all messages for all keypairs.
   pull(
-    sbot.backlinks({
-      query: [
-        {$filter: {
-          dest: {$prefix: '#'}
-        }}
-      ]
-    }),
-    pull.drain(msg => {
-      console.log(msg)
+    sbot.createFeedStream({ limit: 10 }),
+    pull.collect(function (err, ary) {
+      replServer.context.allMessages = ary
     })
   )
-})
 
+  // Get All channels
+  var filter = {
+    dest: `#${channel}`,
+    value: {
+      timestamp: typeof lt === 'number' ? {$lt: lt, $gt: 0} : {$gt: 0}
+    }
+  }
+
+
+  pull(
+    sbot.createFeedStream({ limit: 10 }),
+    pull.collect(function (err, ary) {
+      replServer.context.allMessages = ary
+    })
+  )
+
+
+
+  // TODO: How do you get this to return and not hang forever?
+})

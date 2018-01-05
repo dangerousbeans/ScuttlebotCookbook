@@ -6,6 +6,9 @@ Recipes for how to do some important things with the scuttlebutt p2p net
 - Pub
 - Vote
 
+# Sources of Data
+- PullStreams
+- Callbacks
 
 # Messages
 
@@ -21,6 +24,7 @@ Recipes for how to do some important things with the scuttlebutt p2p net
 ### Filter by type
 
 `sbot.messagesByType( type: 'vote' )`
+
 
 ### From one feed (person)
 
